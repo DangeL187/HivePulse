@@ -1,0 +1,17 @@
+networks:
+  shared-net:
+    external: true
+
+services:
+  ingress:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      AUTH_GRPC: auth:50051
+      KAFKA_BROKER: kafka:9092
+      KAFKA_TOPIC: device_telemetry
+      MQTT_BROKER: mosquitto:1883
+      MQTT_TOPIC: devices/telemetry
+    networks:
+      - shared-net

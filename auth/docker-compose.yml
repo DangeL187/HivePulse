@@ -1,0 +1,45 @@
+networks:
+  shared-net:
+    external: true
+
+services:
+  db:
+    container_name: auth-postgres
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - auth_postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - shared-net
+
+  auth:
+    container_name: auth
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      JWT_PRIVATE_KEY: MC4CAQAwBQYDK2VwBCIEIEKGfdVCnsVsbFsP4NsgVSpJfnisrQB8l6oU+NBfNngL
+      JWT_PUBLIC_KEY: MCowBQYDK2VwAyEAghmB07RYrurj7vTMEE0hZfzT+1MCam/C0GWpOL+T6rY=
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+      POSTGRES_SSL_MODE: disable
+    ports:
+      - "8000:8000"
+      - "50051:50051"
+    networks:
+      - shared-net
+
+volumes:
+  auth_postgres_data:

@@ -1,0 +1,22 @@
+networks:
+  shared-net:
+    external: true
+
+services:
+  consumer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_DSN: clickhouse:9000
+      CLICKHOUSE_PASSWORD: ""
+      CLICKHOUSE_TABLE: device_data
+      CLICKHOUSE_USERNAME: default
+      KAFKA_BROKER: kafka:9092
+      KAFKA_TOPIC: device_telemetry
+      KAFKA_GROUP_ID: device_consumers
+    deploy:
+      replicas: 2
+    networks:
+      - shared-net

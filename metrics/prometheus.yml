@@ -1,0 +1,12 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'ingress'
+    static_configs:
+      - targets: [ 'ingress:2112' ]
+  - job_name: 'consumer'
+    static_configs:
+      - targets:
+          - 'consumer-1:2112'
+          - 'consumer-2:2112'

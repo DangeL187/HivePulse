@@ -1,0 +1,26 @@
+networks:
+  shared-net:
+    external: true
+
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.12
+    container_name: clickhouse
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./init.sql:/init.sql
+    networks:
+      - shared-net
+    entrypoint: >
+      sh -c "
+      /entrypoint.sh &
+      sleep 5;
+      clickhouse-client --multiquery < /init.sql;
+      wait"
+
+volumes:
+  clickhouse_data:

@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = ".;proto";
+
+service AuthService {
+  rpc AuthDevice (AuthDeviceRequest) returns (AuthDeviceResponse);
+  rpc GetPublicKey (GetPublicKeyRequest) returns (GetPublicKeyResponse);
+}
+
+message AuthDeviceRequest {
+  string token = 1;
+}
+
+message AuthDeviceResponse {
+  uint64 device_id = 1;
+  string error = 2;
+}
+
+message GetPublicKeyRequest {}
+
+message GetPublicKeyResponse {
+  string public_key = 1;
+}
