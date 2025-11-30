@@ -1,0 +1,19 @@
+networks:
+  shared-net:
+    external: true
+
+services:
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto:2
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - mosquitto_data:/mosquitto/data
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      - shared-net
+
+volumes:
+  mosquitto_data:
