@@ -15,8 +15,7 @@ robust, fault-tolerant operation.
 
 ## ⚡️ Ingress (MQTT-to-Kafka) service
 
-The **ingress** service is responsible for collecting telemetry data from devices via **MQTT** and forwarding it to *
-*Kafka** for downstream processing.
+The **ingress** service is responsible for collecting telemetry data from devices via **MQTT** and forwarding it to **Kafka** for downstream processing.
 It is built with modularity in mind, allowing easy replacement or extension of components without affecting the rest of
 the system.
 
@@ -124,8 +123,7 @@ gateway for HivePulse's telemetry ecosystem.
 
 ## 📈 Metrics
 
-You can find simple **Grafana** dashboard for **ClickHouse
-** [here](https://github.com/DangeL187/HivePulse/blob/main/metrics/clickhouse.json).
+You can find simple **Grafana** dashboard for **ClickHouse** [here](https://github.com/DangeL187/HivePulse/blob/main/metrics/clickhouse.json).
 
 # 🔧 Code Architecture Decisions
 
