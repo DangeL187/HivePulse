@@ -4,7 +4,7 @@
 Built as a full-fledged microservices ecosystem, it efficiently ingests, processes, and stores massive streams of data
 while maintaining high availability and horizontal scalability.
 
-**HivePulse** reliably handles around **180K RPS**, demonstrates predictable behavior under heavy load, and is built for
+**HivePulse** reliably handles around **18K RPS**, demonstrates predictable behavior under heavy load, and is built for
 robust, fault-tolerant operation.
 
 # 🔥 Services Overview
