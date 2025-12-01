@@ -2,7 +2,7 @@ package grpc
 
 import (
 	"context"
-	"log"
+	"go.uber.org/zap"
 
 	"github.com/DangeL187/erax"
 
@@ -18,8 +18,7 @@ type AuthHandler struct {
 func (a *AuthHandler) AuthDevice(_ context.Context, req *pb.AuthDeviceRequest) (*pb.AuthDeviceResponse, error) {
 	deviceID, tokenType, err := a.app.JWTManager.ParseToken(req.Token)
 	if err != nil {
-		err = erax.Wrap(err, "failed to parse token")
-		log.Printf("\n%f\n", err)
+		zap.S().Errorf("Failed to parse token:\n%f", err)
 
 		return &pb.AuthDeviceResponse{
 			DeviceId: 0,
@@ -27,7 +26,7 @@ func (a *AuthHandler) AuthDevice(_ context.Context, req *pb.AuthDeviceRequest) (
 		}, nil
 	}
 	if tokenType != "access" {
-		log.Printf("wrong token type (%s)\n", tokenType)
+		zap.L().Error("Wrong token type", zap.String("token type", tokenType))
 
 		return &pb.AuthDeviceResponse{
 			DeviceId: 0,

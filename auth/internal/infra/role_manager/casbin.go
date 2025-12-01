@@ -1,13 +1,14 @@
 package role_manager
 
 import (
-	"auth/internal/shared/config"
 	"gorm.io/gorm"
 	"strconv"
 
 	"github.com/DangeL187/erax"
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/gorm-adapter/v3"
+
+	"auth/internal/shared/config"
 )
 
 type RoleManager struct {

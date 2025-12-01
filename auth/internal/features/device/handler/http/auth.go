@@ -2,10 +2,9 @@ package http
 
 import (
 	"errors"
-	"log"
+	"go.uber.org/zap"
 	"net/http"
 
-	"github.com/DangeL187/erax"
 	"github.com/gin-gonic/gin"
 
 	"auth/internal/app"
@@ -72,8 +71,7 @@ func Register(app *app.App) gin.HandlerFunc {
 			input,
 		)
 		if err != nil {
-			err = erax.Wrap(err, "failed to register device")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to register device:\n%f", err)
 
 			if errors.Is(err, auth.ErrInvalidCredentials) {
 				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "invalid credentials"})
@@ -99,8 +97,7 @@ func Refresh(app *app.App) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		refreshToken, err := c.Cookie("refresh_token")
 		if err != nil {
-			err = erax.Wrap(err, "failed to find refresh_token cookie")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to find refresh_token cookie:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 			return
@@ -108,8 +105,7 @@ func Refresh(app *app.App) gin.HandlerFunc {
 
 		accessToken, err := app.DeviceModule.Auth.Refresh(app.Config.DeviceAccessTokenTTL, refreshToken)
 		if err != nil {
-			err = erax.Wrap(err, "failed to refresh access token")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to refresh access token:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid refresh token"})
 			return

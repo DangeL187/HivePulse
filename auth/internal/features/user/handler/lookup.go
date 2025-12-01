@@ -1,10 +1,9 @@
 package handler
 
 import (
-	"log"
+	"go.uber.org/zap"
 	"net/http"
 
-	"github.com/DangeL187/erax"
 	"github.com/gin-gonic/gin"
 
 	"auth/internal/app"
@@ -18,8 +17,7 @@ func Lookup(app *app.App) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		req := UserEmailRequest{}
 		if err := c.ShouldBindJSON(&req); err != nil {
-			err = erax.Wrap(err, "failed to parse user email request")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to parse user email request:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid input"})
 			return
@@ -27,8 +25,7 @@ func Lookup(app *app.App) gin.HandlerFunc {
 
 		userID, err := app.UserModule.User.GetUserIDByEmail(req.Email)
 		if err != nil {
-			err = erax.Wrap(err, "failed to get user ID by email")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to get user ID by email:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "user not found"})
 			return

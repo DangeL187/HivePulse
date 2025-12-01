@@ -2,10 +2,10 @@ package database
 
 import (
 	"context"
+	"go.uber.org/zap"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"log"
 	"time"
 
 	"github.com/DangeL187/erax"
@@ -34,7 +34,7 @@ func NewPostgres(cfg *config.Config) (*gorm.DB, error) {
 			if err == nil {
 				return db, nil
 			}
-			log.Printf("[DB] Postgres not ready yet. Retrying in 2s...")
+			zap.L().Info("[DB] Postgres not ready yet. Retrying in 2s...")
 			<-ticker.C
 		}
 	}

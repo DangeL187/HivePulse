@@ -1,7 +1,7 @@
 package server
 
 import (
-	"log"
+	"go.uber.org/zap"
 
 	"github.com/DangeL187/erax"
 	"github.com/gin-gonic/gin"
@@ -15,7 +15,7 @@ type Server struct {
 }
 
 func (s *Server) Run(addr string) error {
-	log.Printf("HTTP server launched on http://%s", addr)
+	zap.S().Infof("HTTP server launched on http://%s", addr)
 
 	err := s.engine.Run(addr)
 	if err != nil {

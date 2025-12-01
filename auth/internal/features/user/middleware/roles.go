@@ -1,11 +1,10 @@
 package middleware
 
 import (
-	"log"
+	"go.uber.org/zap"
 	"net/http"
 	"strconv"
 
-	"github.com/DangeL187/erax"
 	"github.com/gin-gonic/gin"
 
 	"auth/internal/app"
@@ -23,8 +22,7 @@ func UserHasPermission(app *app.App, obj string, act string) gin.HandlerFunc {
 
 		allowed, err := app.RoleManager.Enforce(authUserIDStr, obj, act)
 		if err != nil {
-			err = erax.Wrap(err, "failed to enforce")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to enforce:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "failed to check permission"})
 			return

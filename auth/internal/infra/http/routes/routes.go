@@ -1,10 +1,10 @@
 package routes
 
 import (
-	deviceHandler "auth/internal/features/device/handler/http"
 	"github.com/gin-gonic/gin"
 
 	"auth/internal/app"
+	deviceHandler "auth/internal/features/device/handler/http"
 	userHandler "auth/internal/features/user/handler"
 	"auth/internal/features/user/middleware"
 )

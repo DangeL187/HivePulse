@@ -1,10 +1,9 @@
 package handler
 
 import (
-	"log"
+	"go.uber.org/zap"
 	"net/http"
 
-	"github.com/DangeL187/erax"
 	"github.com/gin-gonic/gin"
 
 	"auth/internal/app"
@@ -16,8 +15,7 @@ func GetRoles(app *app.App) gin.HandlerFunc {
 		targetUserIDParam := c.Param("id")
 		targetUserID, err := strutil.StringToUint(targetUserIDParam)
 		if err != nil {
-			err = erax.Wrap(err, "failed to parse target user ID")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to parse target user ID:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid input"})
 			return
@@ -25,8 +23,7 @@ func GetRoles(app *app.App) gin.HandlerFunc {
 
 		roles, err := app.UserModule.Roles.GetRoles(targetUserID)
 		if err != nil {
-			err = erax.Wrap(err, "failed to get roles")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to get roles:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "failed to get roles"})
 			return
@@ -47,8 +44,7 @@ func GrantRole(app *app.App) gin.HandlerFunc {
 		targetUserIDParam := c.Param("id")
 		targetUserID, err := strutil.StringToUint(targetUserIDParam)
 		if err != nil {
-			err = erax.Wrap(err, "failed to parse target user ID")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to parse target user ID:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid input"})
 			return
@@ -56,8 +52,7 @@ func GrantRole(app *app.App) gin.HandlerFunc {
 
 		exists, err := app.UserModule.User.UserExists(targetUserID)
 		if err != nil {
-			err = erax.Wrap(err, "failed to check if user exists")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to check if user exists:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 			return
@@ -69,8 +64,7 @@ func GrantRole(app *app.App) gin.HandlerFunc {
 
 		req := GrantRoleRequest{}
 		if err = c.ShouldBindJSON(&req); err != nil {
-			err = erax.Wrap(err, "failed to parse grant role request")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to parse grant role request:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid input"})
 			return
@@ -78,8 +72,7 @@ func GrantRole(app *app.App) gin.HandlerFunc {
 
 		wasGranted, err := app.UserModule.Roles.GrantRole(targetUserID, req.Role)
 		if err != nil {
-			err = erax.Wrap(err, "failed to grant role")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to grant role:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "failed to grant role"})
 			return
@@ -100,8 +93,7 @@ func RevokeRole(app *app.App) gin.HandlerFunc {
 		targetUserIDParam := c.Param("id")
 		targetUserID, err := strutil.StringToUint(targetUserIDParam)
 		if err != nil {
-			err = erax.Wrap(err, "failed to parse target user ID")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to parse target user ID:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid input"})
 			return
@@ -109,8 +101,7 @@ func RevokeRole(app *app.App) gin.HandlerFunc {
 
 		exists, err := app.UserModule.User.UserExists(targetUserID)
 		if err != nil {
-			err = erax.Wrap(err, "failed to check if user exists")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to check if user exists:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "internal server error"})
 			return
@@ -128,8 +119,7 @@ func RevokeRole(app *app.App) gin.HandlerFunc {
 
 		err = app.UserModule.Roles.RevokeRole(targetUserID, targetRole)
 		if err != nil {
-			err = erax.Wrap(err, "failed to revoke role")
-			log.Printf("\n%f\n", err)
+			zap.S().Errorf("Failed to revoke role:\n%f", err)
 
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "failed to revoke role"})
 			return

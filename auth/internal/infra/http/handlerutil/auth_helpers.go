@@ -2,11 +2,10 @@ package handlerutil
 
 import (
 	"errors"
-	"log"
+	"go.uber.org/zap"
 	"net/http"
 	"time"
 
-	"github.com/DangeL187/erax"
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,8 +27,8 @@ type TokenConfig struct {
 
 func BindJSON[T any](c *gin.Context, req *T, errorMessage string) bool {
 	if err := c.ShouldBindJSON(req); err != nil {
-		err = erax.Wrap(err, errorMessage)
-		log.Printf("\n%f\n", err)
+		zap.S().Errorf("%s:\n%f", errorMessage, err)
+
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid input"})
 		return false
 	}
@@ -62,8 +61,7 @@ func RespondAuth(c *gin.Context, tokens TokenPair, cfg TokenConfig, message stri
 }
 
 func HandleError(c *gin.Context, err error, message string, mapping map[error]ErrorResponse) {
-	err = erax.Wrap(err, message)
-	log.Printf("\n%f\n", err)
+	zap.S().Errorf("%s:\n%f", message, err)
 
 	for target, errorResponse := range mapping {
 		if errors.Is(err, target) {

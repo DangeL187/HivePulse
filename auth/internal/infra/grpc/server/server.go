@@ -1,8 +1,8 @@
 package server
 
 import (
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"log"
 	"net"
 
 	"github.com/DangeL187/erax"
@@ -17,7 +17,7 @@ type Server struct {
 }
 
 func (s *Server) Run(addr string) error {
-	log.Printf("gRPC server launched on %s", addr)
+	zap.L().Info("gRPC server launched on", zap.String("address", addr))
 
 	lis, err := net.Listen("tcp", addr)
 	if err != nil {

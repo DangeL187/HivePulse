@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"log"
+	"go.uber.org/zap"
 	"os"
 	"time"
 
@@ -22,7 +22,7 @@ type Config struct {
 
 func NewConfig() (*Config, error) {
 	if err := godotenv.Load(); err != nil {
-		log.Println("[env] no .env file found, skipping")
+		zap.L().Info("[env] no .env file found, skipping")
 	}
 
 	postgresDSN, err := loadPostgresDSN()
