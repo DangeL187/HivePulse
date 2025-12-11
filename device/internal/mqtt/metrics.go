@@ -11,6 +11,7 @@ import (
 	"device/internal/http"
 	"device/internal/shared/config"
 	"device/internal/shared/tokens"
+	m "device/metrics"
 )
 
 type deviceData struct {
@@ -43,6 +44,8 @@ func (ms *MetricsService) Run(ctx context.Context) {
 	if !ms.authService.Login(ctx) {
 		return
 	}
+
+	m.AuthCounter.Add(1)
 
 	token := ms.mqttClient.Subscribe(
 		"devices/"+ms.cfg.DeviceID+"/auth_response",
@@ -129,7 +132,7 @@ func (ms *MetricsService) publish(msg deviceData) {
 		return
 	}
 
-	zap.L().Debug("Sent", zap.String("Payload", string(payload)))
+	m.Counter.Add(1)
 }
 
 type authResponse struct {

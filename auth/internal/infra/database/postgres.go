@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"database/sql"
 	"go.uber.org/zap"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -31,11 +32,22 @@ func NewPostgres(cfg *config.Config) (*gorm.DB, error) {
 			db, err = gorm.Open(postgres.Open(cfg.PostgresDSN), &gorm.Config{
 				Logger: logger.Default.LogMode(logger.Silent),
 			})
-			if err == nil {
-				return db, nil
+			if err != nil {
+				zap.L().Info("[DB] Postgres not ready yet. Retrying in 2s...")
+				<-ticker.C
 			}
-			zap.L().Info("[DB] Postgres not ready yet. Retrying in 2s...")
-			<-ticker.C
+
+			var sqlDB *sql.DB
+			sqlDB, err = db.DB()
+			if err != nil {
+				return nil, err
+			}
+
+			sqlDB.SetMaxOpenConns(50)
+			sqlDB.SetMaxIdleConns(10)
+			sqlDB.SetConnMaxLifetime(time.Minute * 5)
+
+			return db, nil
 		}
 	}
 }

@@ -2,7 +2,7 @@ import requests
 
 
 def register_device(token):
-    for i in range(200):
+    for i in range(1000):
         _register_device(token, i+1)
 
 def _register_device(token, device_id):

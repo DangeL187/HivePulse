@@ -48,7 +48,7 @@ func (cl *ConsumerLoop) handleIncomingMessage(payload []byte) {
 	default:
 		metrics.MessagesDropped.Inc()
 		// TODO: ask for retry
-		zap.L().Info("msgChanOut full: dropping message")
+		zap.L().Debug("msgChanOut full: dropping message")
 	}
 
 	metrics.ConsumerLatency.Observe(time.Since(start).Seconds())

@@ -33,7 +33,7 @@ type AuthService struct {
 }
 
 func (as *AuthService) Run(ctx context.Context) {
-	as.runErrRespWorkers(ctx, 5)
+	as.runErrRespWorkers(ctx, 1)
 }
 
 func (as *AuthService) Stop() {

@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 0,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -101,11 +101,16 @@
       "targets": [
         {
           "datasource": "clickhouse",
-          "rawSql": "SELECT\n  toStartOfMinute(timestamp) AS time,\n  count(*) AS value\nFROM device_data\nWHERE $__timeFilter(timestamp)\nGROUP BY time\nORDER BY time",
+          "editorType": "sql",
+          "format": 1,
+          "meta": {},
+          "pluginVersion": "4.11.2",
+          "queryType": "table",
+          "rawSql": "SELECT\n  toStartOfMinute(timestamp) AS time,\n  (count(*) / 60) AS value\nFROM device_data\nWHERE $__timeFilter(timestamp)\nGROUP BY time\nORDER BY time",
           "refId": "A"
         }
       ],
-      "title": "Метрики в минуту",
+      "title": "Метрики в секунду",
       "type": "barchart"
     }
   ],
@@ -119,12 +124,12 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Metrics per Minute",
+  "title": "ClickHouse",
   "uid": "adpnpvb",
-  "version": 5
+  "version": 3
 }

@@ -37,8 +37,8 @@ func NewKafkaProducer(kafkaBroker string) (*KafkaProducer, error) {
 	kafkaConfig.Producer.RequiredAcks = sarama.WaitForLocal
 	kafkaConfig.Producer.Retry.Max = 3
 	kafkaConfig.Producer.Idempotent = false
-	kafkaConfig.Producer.Flush.Frequency = 10 * time.Millisecond
-	kafkaConfig.Producer.Flush.Bytes = 256 * 1024
+	kafkaConfig.Producer.Flush.Frequency = 5 * time.Millisecond
+	kafkaConfig.Producer.Flush.Bytes = 32 * 1024 // 32 KB
 	kafkaConfig.Producer.Compression = sarama.CompressionLZ4
 	kafkaConfig.Net.KeepAlive = 30 * time.Second
 	kafkaConfig.Producer.Return.Successes = false

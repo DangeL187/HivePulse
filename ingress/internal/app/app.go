@@ -6,6 +6,7 @@ import (
 
 	"github.com/DangeL187/erax"
 	"github.com/eclipse/paho.mqtt.golang"
+	"github.com/google/uuid"
 
 	authInfra "ingress/internal/features/auth/infra"
 	authRuntime "ingress/internal/features/auth/runtime"
@@ -52,9 +53,7 @@ func (a *App) Stop() {
 }
 
 func NewApp() (*App, error) {
-	app := &App{
-		msgChan: make(chan []byte, 10000), // 0.5s * 10K RPS
-	}
+	app := &App{}
 
 	var err error
 	app.cfg, err = config.NewConfig()
@@ -62,14 +61,22 @@ func NewApp() (*App, error) {
 		return nil, erax.Wrap(err, "failed to load config")
 	}
 
+	app.msgChan = make(chan []byte, app.cfg.MsgChanSize)
+
 	// publisher and consumer
 	opts := mqtt.NewClientOptions().
 		AddBroker("tcp://" + app.cfg.MQTTBroker).
-		SetClientID("device_ingress_service")
+		SetClientID(app.cfg.MQTTClientID + uuid.New().String())
 	mqttClient := mqtt.NewClient(opts)
 
 	publisher := infraMqtt.NewPublisher(mqttClient)
 	consumer := infraMqtt.NewConsumer(mqttClient, app.cfg.MQTTTopic)
+
+	// ConsumerLoop
+	app.consumerLoop, err = consumerRuntime.NewConsumerLoop(app.cfg, app.msgChan, consumer)
+	if err != nil {
+		return nil, erax.Wrap(err, "failed to create consumer loop")
+	}
 
 	// Auth Service
 	authenticator, err := authInfra.NewGRPCAuthenticator(app.cfg.GRPCAddr)
@@ -80,12 +87,6 @@ func NewApp() (*App, error) {
 	authService, err := authRuntime.NewAuthService(authenticator, publisher)
 	if err != nil {
 		return nil, erax.Wrap(err, "failed to create auth service")
-	}
-
-	// ConsumerLoop
-	app.consumerLoop, err = consumerRuntime.NewConsumerLoop(app.cfg, app.msgChan, consumer)
-	if err != nil {
-		return nil, erax.Wrap(err, "failed to create consumer loop")
 	}
 
 	// ProducerLoop

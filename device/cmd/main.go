@@ -1,13 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"go.uber.org/zap"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
+	"time"
 
 	"device/internal/app"
+	m "device/metrics"
 )
 
 func run(id int) {
@@ -33,7 +36,7 @@ func main() {
 	}()
 
 	var wg sync.WaitGroup
-	instances := 200
+	instances := 600
 
 	for i := 0; i < instances; i++ {
 		wg.Add(1)
@@ -42,6 +45,18 @@ func main() {
 			run(id)
 		}(i + 1)
 	}
+
+	go func() {
+		ticker := time.NewTicker(time.Second)
+		for {
+			select {
+			case <-ticker.C:
+				fmt.Println("Metrics Per Second", m.Counter.Load())
+				fmt.Println("Auths Total", m.AuthCounter.Load())
+				m.Counter.Store(0)
+			}
+		}
+	}()
 
 	wg.Wait()
 }

@@ -3,17 +3,19 @@ networks:
     external: true
 
 services:
-  mosquitto:
-    container_name: mosquitto
-    image: eclipse-mosquitto:2
+  emqx:
+    container_name: emqx
+    image: emqx/emqx:5.3.0
+    restart: unless-stopped
+    environment:
+      EMQX_ALLOW_ANONYMOUS: true
+      EMQX_LISTENER__TCP__EXTERNAL: 1883
+      EMQX_LISTENER__WS__EXTERNAL: 9001
+      EMQX_CONNECTION__MAX: 1000000
+      EMQX_FORCE_SHUTDOWN__ENABLE: false
     ports:
       - "1883:1883"
       - "9001:9001"
-    volumes:
-      - mosquitto_data:/mosquitto/data
-      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - "18083:18083"
     networks:
       - shared-net
-
-volumes:
-  mosquitto_data:

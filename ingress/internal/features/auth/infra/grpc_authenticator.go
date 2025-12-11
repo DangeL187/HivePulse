@@ -6,10 +6,11 @@ import (
 	"crypto/x509"
 	"encoding/base64"
 	"errors"
-	"github.com/DangeL187/erax"
-	"github.com/golang-jwt/jwt/v5"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+
+	"github.com/DangeL187/erax"
+	"github.com/golang-jwt/jwt/v5"
 
 	pb "ingress/internal/infra/grpc/proto/auth"
 )

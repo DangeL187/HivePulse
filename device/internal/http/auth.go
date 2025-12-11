@@ -204,7 +204,7 @@ func (as *AuthService) refresh(url, refreshToken string) (string, error) {
 }
 
 func NewAuthService(cfg *config.Config, tokens *tokens.Tokens) *AuthService {
-	client := &http.Client{Timeout: 5 * time.Second}
+	client := &http.Client{Timeout: time.Minute}
 
 	return &AuthService{
 		auth:   make(chan struct{}),

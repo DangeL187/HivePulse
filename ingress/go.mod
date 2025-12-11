@@ -7,6 +7,7 @@ require (
 	github.com/IBM/sarama v1.46.3
 	github.com/eclipse/paho.mqtt.golang v1.5.0
 	github.com/golang-jwt/jwt/v5 v5.3.0
+	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/prometheus/client_golang v1.23.2
 	go.uber.org/zap v1.27.1

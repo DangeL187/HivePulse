@@ -8,10 +8,14 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
+      MSG_CHAN_SIZE: 100000
       AUTH_GRPC: auth:50051
       KAFKA_BROKER: kafka:9092
       KAFKA_TOPIC: device_telemetry
-      MQTT_BROKER: mosquitto:1883
-      MQTT_TOPIC: devices/telemetry
+      MQTT_BROKER: emqx:1883
+      MQTT_CLIENT_ID: device_ingress_service
+      MQTT_TOPIC: $$share/ingress_group/devices/telemetry
+    deploy:
+      replicas: 8
     networks:
       - shared-net

@@ -4,15 +4,13 @@ import (
 	"fmt"
 	"go.uber.org/zap"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	BatchInterval time.Duration
-	BatchSize     int
-
 	ClickHouseDB       string
 	ClickHouseDSN      string
 	ClickHousePassword string
@@ -21,6 +19,9 @@ type Config struct {
 	KafkaBroker        string
 	KafkaTopic         string
 	KafkaGroupID       string
+
+	BatchInterval time.Duration
+	BatchSize     int
 }
 
 func NewConfig() (*Config, error) {
@@ -36,6 +37,7 @@ func NewConfig() (*Config, error) {
 		"KAFKA_BROKER":        os.Getenv("KAFKA_BROKER"),
 		"KAFKA_GROUP_ID":      os.Getenv("KAFKA_GROUP_ID"),
 		"KAFKA_TOPIC":         os.Getenv("KAFKA_TOPIC"),
+		"BATCH_SIZE":          os.Getenv("BATCH_SIZE"),
 	}
 
 	for name, value := range vars {
@@ -44,12 +46,17 @@ func NewConfig() (*Config, error) {
 		}
 	}
 
+	batchSize, err := strconv.Atoi(vars["BATCH_SIZE"])
+	if err != nil {
+		return nil, fmt.Errorf("invalid BATCH_SIZE: %s", vars["BATCH_SIZE"])
+	}
+
 	return &Config{
 		BatchInterval:      time.Second,
-		BatchSize:          10000,
+		BatchSize:          batchSize,
 		ClickHouseDB:       vars["CLICKHOUSE_DB"],
 		ClickHouseDSN:      vars["CLICKHOUSE_DSN"],
-		ClickHousePassword: os.Getenv("CLICKHOUSE_PASSWORD"),
+		ClickHousePassword: os.Getenv("CLICKHOUSE_PASSWORD"), // as it might be empty
 		ClickHouseTable:    vars["CLICKHOUSE_TABLE"],
 		ClickHouseUsername: vars["CLICKHOUSE_USERNAME"],
 		KafkaBroker:        vars["KAFKA_BROKER"],

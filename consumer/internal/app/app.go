@@ -58,7 +58,7 @@ func (a *App) Stop() {
 
 func NewApp() (*App, error) {
 	app := &App{
-		msgChan: make(chan *sarama.ConsumerMessage, 10000), // 0.5s * 10K RPS
+		msgChan: make(chan *sarama.ConsumerMessage, 10000),
 	}
 
 	var err error
