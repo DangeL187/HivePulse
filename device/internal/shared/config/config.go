@@ -16,8 +16,8 @@ type Config struct {
 
 func NewConfig() *Config {
 	return &Config{
-		AuthServerURL:          "http://localhost:8000",
-		MqttBrokerURL:          "tcp://localhost:1883",
+		AuthServerURL:          "http://localhost:30080", // 8000 - local, 30080 - k8s
+		MqttBrokerURL:          "tcp://localhost:31883",  // 1883 - local, 31883 - k8s
 		DeviceID:               "",
 		DevicePassword:         "secret",
 		ConnectRetryInterval:   5 * time.Second,

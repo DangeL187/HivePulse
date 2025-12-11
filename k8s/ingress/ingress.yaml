@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingress
+  namespace: hive-pulse
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ingress
+  template:
+    metadata:
+      labels:
+        app: ingress
+    spec:
+      containers:
+        - name: ingress
+          image: localhost:5000/ingress:latest
+          ports:
+            - containerPort: 2112
+              name: metrics
+          env:
+            - name: MSG_CHAN_SIZE
+              value: "100000"
+            - name: AUTH_GRPC
+              value: "auth:50051"
+            - name: KAFKA_BROKER
+              value: "kafka.hive-pulse.svc.cluster.local:9092"
+            - name: KAFKA_TOPIC
+              value: "device_telemetry"
+            - name: MQTT_BROKER
+              value: "emqx:1883"
+            - name: MQTT_CLIENT_ID
+              value: "device_ingress_service"
+            - name: MQTT_TOPIC
+              value: "$$share/ingress_group/devices/telemetry"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress
+  namespace: hive-pulse
+spec:
+  type: ClusterIP
+  selector:
+    app: ingress
+  ports:
+    - port: 2112
+      targetPort: 2112
+      name: metrics

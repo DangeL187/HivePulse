@@ -3,20 +3,20 @@ import json
 import requests
 
 
-def grant_role_admin_to_admin(token):
-    return _grant_role(1, token, 'admin')
+def grant_role_admin_to_admin(url, token):
+    return _grant_role(url, 1, token, 'admin')
 
 
-def grant_role_admin_to_user(token):
-    return _grant_role(2, token, 'admin')
+def grant_role_admin_to_user(url, token):
+    return _grant_role(url, 2, token, 'admin')
 
 
-def grant_role_operator_to_user(token):
-    return _grant_role(2, token, 'operator')
+def grant_role_operator_to_user(url, token):
+    return _grant_role(url, 2, token, 'operator')
 
 
-def _grant_role(uid, token, role):
-    url = f"http://localhost:8000/users/{uid}/roles"
+def _grant_role(url, uid, token, role):
+    url = f"{url}/users/{uid}/roles"
 
     headers = {
         "Content-Type": "application/json",

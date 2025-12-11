@@ -36,7 +36,7 @@ func main() {
 	}()
 
 	var wg sync.WaitGroup
-	instances := 600
+	instances := 500
 
 	for i := 0; i < instances; i++ {
 		wg.Add(1)

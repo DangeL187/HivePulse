@@ -9,6 +9,12 @@ import (
 )
 
 func main() {
+	logger, _ := zap.NewDevelopment()
+	zap.ReplaceGlobals(logger)
+	defer func() {
+		_ = logger.Sync()
+	}()
+
 	application, err := app.NewApp()
 	if err != nil {
 		zap.S().Fatalf("Failed to create App:\n%f", err)

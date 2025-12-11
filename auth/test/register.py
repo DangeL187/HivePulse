@@ -1,8 +1,8 @@
 import requests
 
 
-def register_user():
-    url = "http://localhost:8000/users/register"
+def register_user(url):
+    url = f"{url}/users/register"
 
     headers = {
         "Content-Type": "application/json",

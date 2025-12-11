@@ -7,6 +7,11 @@ while maintaining high availability and horizontal scalability.
 **HivePulse** reliably handles around **50K RPS**, demonstrates predictable behavior under heavy load, and is built for
 robust, fault-tolerant operation.
 
+# ✨ How to Run
+
+- [Using Kubernetes](https://github.com/DangeL187/HivePulse/blob/main/k8s/README.md) **(recommended)**
+- [Using docker-compose](https://github.com/DangeL187/HivePulse/blob/main/docker/README.md)
+
 # 🔥 Services Overview
 
 ## 🌐 MQTT Broker
@@ -15,7 +20,8 @@ robust, fault-tolerant operation.
 
 ## ⚡️ Ingress (MQTT-to-Kafka) service
 
-The **ingress** service is responsible for collecting telemetry data from devices via **MQTT** and forwarding it to **Kafka** for downstream processing.
+The **ingress** service is a horizontally scalable service responsible for collecting telemetry data from devices via
+**MQTT** and forwarding it to **Kafka** for downstream processing.
 It is built with modularity in mind, allowing easy replacement or extension of components without affecting the rest of
 the system.
 
@@ -123,7 +129,8 @@ gateway for HivePulse's telemetry ecosystem.
 
 ## 📈 Metrics
 
-You can find simple **Grafana** dashboard for **ClickHouse** [here](https://github.com/DangeL187/HivePulse/blob/main/metrics/clickhouse.json).
+You can find simple **Grafana** dashboard for **ClickHouse**
+[here](https://github.com/DangeL187/HivePulse/blob/main/k8s/metrics/clickhouse.json).
 
 # 🔧 Code Architecture Decisions
 
@@ -136,9 +143,11 @@ You can find simple **Grafana** dashboard for **ClickHouse** [here](https://gith
 - **Device Service as Load Simulator**
     - Initially was meant to be a one-file mock program for sending metrics.
     - The code does not follow strict architectural patterns and should be treated as a simulation tool.
-    - By default, 200 replicas of the **device** service run, each sending 100 metrics/sec, generating roughly 20K
+    - By default, 500 replicas of the **device** service run, each sending 100 metrics/sec, generating roughly 50K
       requests/sec for testing system load.
 
 ## Libraries and Tooling
-- **Error Handling**: Custom library [erax](https://github.com/DangeL187/erax) is used for consistent and convenient error handling across all services.
+
+- **Error Handling**: Custom library [erax](https://github.com/DangeL187/erax) is used for consistent and convenient
+  error handling across all services.
 - **Logging**: Uber Zap is used for structured and performant logging.

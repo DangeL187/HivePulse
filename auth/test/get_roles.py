@@ -3,16 +3,16 @@ import json
 import requests
 
 
-def get_roles_admin(token):
-    return _get_roles(1, token)
+def get_roles_admin(url, token):
+    return _get_roles(url, 1, token)
 
 
-def get_roles_user(token):
-    return _get_roles(2, token)
+def get_roles_user(url, token):
+    return _get_roles(url, 2, token)
 
 
-def _get_roles(uid, token):
-    url = f"http://localhost:8000/users/{uid}/roles"
+def _get_roles(url, uid, token):
+    url = f"{url}/users/{uid}/roles"
 
     headers = {
         "Content-Type": "application/json",

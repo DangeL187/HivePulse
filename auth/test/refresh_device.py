@@ -1,8 +1,8 @@
 import requests
 
 
-def refresh_device(token):
-    url = "http://localhost:8000/devices/refresh"
+def refresh_device(url, token):
+    url = f"{url}/devices/refresh"
 
     headers = {
         "Content-Type": "application/json",

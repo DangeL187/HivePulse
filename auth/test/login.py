@@ -1,16 +1,16 @@
 import requests
 
 
-def login_admin():
-    return _login("admin", "admin")
+def login_admin(url):
+    return _login(url, "admin", "admin")
 
 
-def login_user():
-    return _login("test@example.com", "secret")
+def login_user(url):
+    return _login(url, "test@example.com", "secret")
 
 
-def _login(email, password):
-    url = "http://localhost:8000/users/login"
+def _login(url, email, password):
+    url = f"{url}/users/login"
 
     headers = {
         "Content-Type": "application/json",

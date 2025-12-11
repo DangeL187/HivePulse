@@ -6,7 +6,7 @@ services:
   ingress:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ../../ingress/Dockerfile
     environment:
       MSG_CHAN_SIZE: 100000
       AUTH_GRPC: auth:50051
@@ -16,6 +16,6 @@ services:
       MQTT_CLIENT_ID: device_ingress_service
       MQTT_TOPIC: $$share/ingress_group/devices/telemetry
     deploy:
-      replicas: 8
+      replicas: 2
     networks:
       - shared-net

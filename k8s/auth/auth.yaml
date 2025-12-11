@@ -1,0 +1,59 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  namespace: hive-pulse
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: localhost:5000/auth:latest
+          ports:
+            - containerPort: 8000
+            - containerPort: 50051
+          env:
+            - name: JWT_PRIVATE_KEY
+              value: "MC4CAQAwBQYDK2VwBCIEIEKGfdVCnsVsbFsP4NsgVSpJfnisrQB8l6oU+NBfNngL"
+            - name: JWT_PUBLIC_KEY
+              value: "MCowBQYDK2VwAyEAghmB07RYrurj7vTMEE0hZfzT+1MCam/C0GWpOL+T6rY="
+            - name: POSTGRES_HOST
+              value: "postgres"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: "myuser"
+            - name: POSTGRES_PASSWORD
+              value: "mypassword"
+            - name: POSTGRES_DB
+              value: "mydb"
+            - name: POSTGRES_SSL_MODE
+              value: "disable"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth
+  namespace: hive-pulse
+spec:
+  type: NodePort
+  selector:
+    app: auth
+  ports:
+    - port: 8000
+      targetPort: 8000
+      nodePort: 30080
+      name: http
+    - port: 50051
+      targetPort: 50051
+      nodePort: 30551
+      name: grpc

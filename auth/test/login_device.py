@@ -1,8 +1,8 @@
 import requests
 
 
-def login_device():
-    url = "http://localhost:8000/devices/login"
+def login_device(url):
+    url = f"{url}/devices/login"
 
     headers = {
         "Content-Type": "application/json",

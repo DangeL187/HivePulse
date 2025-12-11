@@ -23,7 +23,7 @@ services:
     container_name: auth
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ../../auth/Dockerfile
     depends_on:
       - db
     environment:

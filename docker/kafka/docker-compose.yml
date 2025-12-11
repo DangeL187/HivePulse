@@ -5,7 +5,7 @@ networks:
 services:
   kafka:
     container_name: kafka
-    image: bitnami/kafka:latest
+    image: bitnamilegacy/kafka:latest
     ports:
       - "9092:9092"
     environment:
@@ -19,13 +19,13 @@ services:
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=false
     volumes:
-      - kafka_data:/bitnami/kafka
+      - kafka_data:/bitnamilegacy/kafka
     networks:
       - shared-net
 
   kafka-init:
     container_name: kafka-init
-    image: bitnami/kafka:latest
+    image: bitnamilegacy/kafka:latest
     depends_on:
       - kafka
     entrypoint: >

@@ -6,7 +6,7 @@ services:
   consumer:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ../../consumer/Dockerfile
     environment:
       BATCH_SIZE: 10000
       CLICKHOUSE_DB: default

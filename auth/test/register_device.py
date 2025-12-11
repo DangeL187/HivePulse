@@ -1,12 +1,13 @@
 import requests
 
 
-def register_device(token):
-    for i in range(1000):
-        _register_device(token, i+1)
+def register_device(url, token):
+    for i in range(500):
+        _register_device(url, token, i+1)
 
-def _register_device(token, device_id):
-    url = "http://localhost:8000/devices/register"
+
+def _register_device(url, token, device_id):
+    url = f"{url}/devices/register"
 
     headers = {
         "Content-Type": "application/json",
@@ -25,6 +26,7 @@ def _register_device(token, device_id):
         response = requests.post(url, headers=headers, json=data, cookies=cookie)
         return response.cookies['access_token'], response.cookies['refresh_token']
     except Exception as e:
-        print('[ERROR]', e)
+        pass
+        # print('[ERROR]', e)  # raises exception if device exists
 
     return None

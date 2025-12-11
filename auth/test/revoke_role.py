@@ -3,16 +3,16 @@ import json
 import requests
 
 
-def revoke_role_admin_from_user(uid, token):
-    return _revoke_role_from_user(uid, token, "admin")
+def revoke_role_admin_from_user(url, uid, token):
+    return _revoke_role_from_user(url, uid, token, "admin")
 
 
-def revoke_role_operator_from_user(uid, token):
-    return _revoke_role_from_user(uid, token, "operator")
+def revoke_role_operator_from_user(url, uid, token):
+    return _revoke_role_from_user(url, uid, token, "operator")
 
 
-def _revoke_role_from_user(uid, token, role):
-    url = f"http://localhost:8000/users/{uid}/roles/{role}"
+def _revoke_role_from_user(url, uid, token, role):
+    url = f"{url}/users/{uid}/roles/{role}"
 
     headers = {
         "Content-Type": "application/json",
