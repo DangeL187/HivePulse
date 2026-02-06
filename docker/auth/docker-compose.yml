@@ -14,8 +14,6 @@ services:
     volumes:
       - auth_postgres_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
     networks:
       - shared-net
 
@@ -27,6 +25,8 @@ services:
     depends_on:
       - db
     environment:
+      # NOTE: These secrets are hardcoded here for demonstration purposes only.
+      # In real environments, use environment variables, .env files, or a secrets manager
       JWT_PRIVATE_KEY: MC4CAQAwBQYDK2VwBCIEIEKGfdVCnsVsbFsP4NsgVSpJfnisrQB8l6oU+NBfNngL
       JWT_PUBLIC_KEY: MCowBQYDK2VwAyEAghmB07RYrurj7vTMEE0hZfzT+1MCam/C0GWpOL+T6rY=
       POSTGRES_HOST: db
